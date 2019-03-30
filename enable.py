@@ -32,7 +32,7 @@ def wifi_login():
     browser.submit_form(login_form)
 
 def get_current_quota():
-    usage = float(requests.get('http://login.wifionice.de/usage_info/').content)
+    usage = float(requests.get('http://login.wifionice.de/usage_info/').content)*100
     return usage
 
 print("wifi on ice started, press Ctrl+C to exit.")
@@ -41,7 +41,7 @@ while True:
     try:
         time.sleep(2)
         quota_now = get_current_quota()
-        print('Currently {0.2f}% of your quota are used.'.format(quota_now))
+        print('Currently {:0.2f}% of your quota are used.'.format(quota_now))
         if int(quota_now) > 90:
             print('More than 90% of your quota are used, reconnecting!!!')
             os.system('sudo macchanger -r {}'.format(args.interface))
@@ -49,7 +49,7 @@ while True:
             connect_wifi()
             time.sleep(2)
             wifi_login()
-    except Exception, e:
+    except Exception as e:
         print(e)
         pass
 
